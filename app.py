@@ -9,7 +9,6 @@ st.set_page_config(
     layout="wide"
 )
 st.title("Equicity GeoAI v1.0 — Folium Edition")
-# 🌆 App Intro Section
 st.markdown("### GeoAI for Smarter Urban Logistics")
 st.image("assets/poster.png", use_container_width=True)
 st.markdown("""
@@ -19,13 +18,8 @@ It integrates **AI-driven spatial analytics** with **GIS visualization**
 to support data-backed decision-making for **urban logistics planning**.
 """)
 st.divider()
-
-
 st.sidebar.header("Controls Panels")
 
-# -----------------------------
-# 📂 DATA UPLOAD SECTION
-# -----------------------------
 with st.sidebar.expander("📂 Data Upload (8 datasets)", expanded=True):
     district = st.file_uploader("🗺️ District Boundary", type=['geojson', 'shp'], key='district')
     roads = st.file_uploader("🛣️ Road Network", type=['geojson', 'shp'], key='roads')
@@ -35,10 +29,7 @@ with st.sidebar.expander("📂 Data Upload (8 datasets)", expanded=True):
     lulc = st.file_uploader("🌿 LULC", type=['geojson', 'tif', 'tiff'], key='lulc')
     dem = st.file_uploader("⛰️ DEM", type=['tif', 'tiff'], key='dem')
     population = st.file_uploader("👥 Population", type=['geojson', 'csv'], key='population')
-
-# -----------------------------
-# ⚖️ WEIGHT SETTINGS
-# -----------------------------
+    
 with st.sidebar.expander("⚖️ Weighting Options", expanded=True):
     use_manual = st.checkbox("Use manual weights", value=True)
     criteria = [
@@ -51,9 +42,6 @@ with st.sidebar.expander("⚖️ Weighting Options", expanded=True):
         total = sum(manual.values()) or 1
         manual = {k: v / total for k, v in manual.items()}
 
-# -----------------------------
-# ⚙️ RUN & EXPORT
-# -----------------------------
 with st.sidebar.expander("⚙️ Run & Export", expanded=True):
     run_button = st.button("🚀 Run Model")
 
@@ -63,9 +51,6 @@ uploaded = [
 ]
 uploaded_files = [f for f in uploaded if f]
 
-# -----------------------------
-# 🚀 MODEL EXECUTION
-# -----------------------------
 if len(uploaded_files) < 8:
     st.warning("Please upload all 8 datasets.")
 else:
@@ -86,9 +71,7 @@ else:
         import folium
         from streamlit_folium import st_folium
 
-        # -----------------------------
-        # 🌈 FOLIUM MAP LOGIC
-        # -----------------------------
+
         color_map = {'Low': '#f94144', 'Medium': '#f9c74f', 'High': '#43aa8b'}
 
         try:
@@ -97,11 +80,9 @@ else:
         except Exception:
             lon, lat = 78.0, 11.0
 
-        # Persistent map flag
         if 'map_ready' not in st.session_state:
             st.session_state['map_ready'] = False
 
-        # Show map button
         if st.button("🗺️ Show Suitability Map") or st.session_state['map_ready']:
             st.session_state['map_ready'] = True
 
@@ -125,7 +106,7 @@ else:
                     name=f"{cls} Suitability"
                 ).add_to(m)
 
-            # Add legend
+            
             legend = '''
             <div style="position: fixed; bottom: 50px; left: 50px; width: 150px; height: 110px;
                         border:2px solid grey; z-index:9999; font-size:14px; background-color:white; padding:10px;">
@@ -140,12 +121,12 @@ else:
             st.subheader("🌈 Folium Suitability Map with Legend")
             st_folium(m, width=900, height=700)
 
-        # Reset button
+        
         if st.button("🔄 Reset Map"):
             st.session_state['map_ready'] = False
             st.success("Map reset. Click 'Show Suitability Map' to render again.")
 
-        # Export GeoJSON
+      
         export_grid = grid.drop(columns=['centroid'], errors='ignore')
         geojson_data = export_grid.to_json()
         st.download_button(
