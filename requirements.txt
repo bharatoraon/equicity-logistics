@@ -1,0 +1,11 @@
+
+streamlit
+geopandas
+pandas
+numpy
+scipy
+shapely
+rasterio
+folium
+streamlit-folium
+branca
