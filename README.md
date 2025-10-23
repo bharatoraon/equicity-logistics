@@ -62,7 +62,7 @@ The app visualizes suitability zones interactively using Folium and provides dow
 
 ```bash
 # 1️⃣ Clone the repository
-git clone https://github.com/<yourusername>/equicity-geoai.git
+git clone https://github.com/bharatoraon/equicity-logistics.git
 cd equicity-geoai
 
 # 2️⃣ Install dependencies
